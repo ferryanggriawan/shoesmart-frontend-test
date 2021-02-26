@@ -14,9 +14,24 @@ class ProductCard extends Component {
             height: "auto",
             aspectRatio: "1/1",
           }}
-          className="text-right"
+          className="flex flex-wrap justify-end items-start"
         >
-          {`i`}
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-5 stroke-current text-gray-600"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </div>
         </div>
         <div className="pt-3 pb-2">
           <div className="text-gray-400 text-xs py-1 truncate">Nama Sepatu</div>
