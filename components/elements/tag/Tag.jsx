@@ -2,13 +2,28 @@ import { Component } from "react"
 
 class Tag extends Component {
   render() {
-    const { children, active = false } = this.props
+    const { children, active = false, className = "" } = this.props
 
     return (
       <div
         className={`px-4 py-2 mx-2 mb-2 sm:mb-0 rounded text-xs truncate ${
           active ? "bg-gray-800 text-white" : "bg-white text-gray-400"
-        }`}
+        } ${className}`}
+      >
+        {children}
+      </div>
+    )
+  }
+}
+
+export class TagSmall extends Component {
+  render() {
+    const { children, active = false, className = "" } = this.props
+    return (
+      <div
+        className={`px-4 py-1 mx-2 mb-2 sm:mb-0 rounded text-xs truncate ${
+          active ? "bg-gray-800 text-white" : "bg-white text-gray-400"
+        } ${className}`}
       >
         {children}
       </div>

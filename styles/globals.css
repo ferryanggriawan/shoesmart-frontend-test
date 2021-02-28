@@ -18,3 +18,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.input-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #e5e7eb;
+  height: 4px;
+}

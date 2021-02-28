@@ -3,8 +3,12 @@ import { Component } from "react"
 import Button from "../../components/elements/button/Button"
 import ProductCard from "../../components/elements/card/ProductCard"
 import Link from "../../components/elements/link/Link"
-import Tag, { TagTransparent } from "../../components/elements/tag/Tag"
+import Tag, {
+  TagSmall,
+  TagTransparent,
+} from "../../components/elements/tag/Tag"
 import TopNavbar from "../../components/navigation/TopNavbar"
+import products from "../../lib/api/products"
 
 class Products extends Component {
   render() {
@@ -71,31 +75,94 @@ class Products extends Component {
                 </div>
               </div>
 
+              <div className="bg-white rounded-xl flex flex-wrap px-8 py-6">
+                <div className="flex-1 px-3">
+                  <div className="text-lg font-medium">Sort</div>
+                  <div className="flex flex-wrap mt-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={true}
+                    >
+                      <small>Ascending</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Descending</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Lower Price</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Higher Price</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Newest</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Oldest</small>
+                    </TagSmall>
+                  </div>
+                </div>
+                <div className="flex-1 px-3">
+                  <div className="text-lg font-medium">Color</div>
+                  <div className="flex flex-wrap mt-3">
+                    <TagSmall
+                      className="border bg-red-600 border-red-600 ml-0 py-1 sm:mb-3"
+                      active={true}
+                    >
+                      <small>Red</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Yellow</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Green</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Black</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Blue</small>
+                    </TagSmall>
+                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                      <small>Pink</small>
+                    </TagSmall>
+                  </div>
+                </div>
+                <div className="flex-1 px-3">
+                  <div className="text-lg font-medium">Size</div>
+                  <div className="flex flex-wrap mt-3">
+                    {[28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40].map(
+                      (size) => (
+                        <TagSmall
+                          key={size}
+                          className="border  border-gray-500 ml-0 sm:px-2 sm:mb-3"
+                        >
+                          <small>{size}</small>
+                        </TagSmall>
+                      )
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1 px-3">
+                  <div className="text-lg font-medium">Price Range</div>
+                  <div className="mt-3">
+                    <div className="flex flex-wrap justify-between">
+                      <div>
+                        <small>Rp 0</small>
+                      </div>
+                      <div>
+                        <small>Rp 2000</small>
+                      </div>
+                    </div>
+                    <input type="range" className="input-slider w-full" />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex flex-wrap py-4">
-                {[
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                  8,
-                  9,
-                  10,
-                  11,
-                  12,
-                  13,
-                  14,
-                  15,
-                  16,
-                  17,
-                  18,
-                  19,
-                  20,
-                ].map((item) => (
+                {products.map((item) => (
                   <div key={item} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
-                    <ProductCard></ProductCard>
+                    <ProductCard key={item.id} product={item}></ProductCard>
                   </div>
                 ))}
               </div>

@@ -7,12 +7,19 @@ import ProductCard from "../components/elements/card/ProductCard"
 import Link from "../components/elements/link/Link"
 import Tag, { TagTransparent } from "../components/elements/tag/Tag"
 import TopNavbar from "../components/navigation/TopNavbar"
+import products from "../lib/api/products"
 
 export async function getServerSideProps(context) {
+  const nProducts = products
   return {
-    props: {},
+    props: {
+      products: nProducts,
+    },
   }
 }
+
+const newProduct = products.slice(0, 10)
+const popularProduct = products.slice(10, 20)
 
 class Home extends Component {
   componentDidMount() {}
@@ -90,9 +97,9 @@ class Home extends Component {
                 </div>
               </div>
               <div className="flex flex-wrap py-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-                  <div key={item} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
-                    <ProductCard></ProductCard>
+                {newProduct.map((item) => (
+                  <div key={item?.id} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
+                    <ProductCard product={item}></ProductCard>
                   </div>
                 ))}
               </div>
@@ -102,9 +109,9 @@ class Home extends Component {
                 </div>
               </div>
               <div className="flex flex-wrap py-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-                  <div key={item} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
-                    <ProductCard></ProductCard>
+                {popularProduct.map((item) => (
+                  <div key={item?.id} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
+                    <ProductCard product={item}></ProductCard>
                   </div>
                 ))}
               </div>

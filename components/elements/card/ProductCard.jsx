@@ -1,12 +1,21 @@
+import { withRouter } from "next/router"
 import { Component } from "react"
 
 class ProductCard extends Component {
   render() {
+    const { product } = this.props
+
     return (
-      <div className="bg-white px-3 py-2 rounded-md">
+      <div
+        className="bg-white px-3 py-2 rounded-md cursor-pointer"
+        onClick={(e) => {
+          e.preventDefault()
+          this.props.router.push(`/products/${product.id}`)
+        }}
+      >
         <div
           style={{
-            backgroundImage: "url(/images/produc-1.jpeg)",
+            backgroundImage: `url(${product?.image_url})`,
             backgroundPosition: "center center",
             backgroundSize: "90%",
             backgroundRepeat: "no-repeat",
@@ -34,12 +43,14 @@ class ProductCard extends Component {
           </div>
         </div>
         <div className="pt-3 pb-2">
-          <div className="text-gray-400 text-xs py-1 truncate">Nama Sepatu</div>
-          <div className="font-medium truncate">Rp 100.000</div>
+          <div className="text-gray-400 text-xs py-1 truncate">
+            {product?.name}
+          </div>
+          <div className="font-medium truncate">{`Rp ${product?.price}`}</div>
         </div>
       </div>
     )
   }
 }
 
-export default ProductCard
+export default withRouter(ProductCard)
