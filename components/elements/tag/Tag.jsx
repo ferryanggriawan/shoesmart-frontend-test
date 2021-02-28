@@ -18,12 +18,18 @@ class Tag extends Component {
 
 export class TagSmall extends Component {
   render() {
-    const { children, active = false, className = "" } = this.props
+    const {
+      children,
+      active = false,
+      className = "",
+      onClick = () => {},
+    } = this.props
     return (
       <div
-        className={`px-4 py-1 mx-2 mb-2 sm:mb-0 rounded text-xs truncate ${
+        className={`px-4 py-1 mx-2 mb-2 sm:mb-0 rounded text-xs truncate cursor-pointer ${
           active ? "bg-gray-800 text-white" : "bg-white text-gray-400"
         } ${className}`}
+        onClick={onClick}
       >
         {children}
       </div>

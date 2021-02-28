@@ -14,8 +14,10 @@ class ProductDetail extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      item: {},
+      item: null,
       imageUrl: "",
+      activeSize: 39,
+      qty: 1,
     }
   }
 
@@ -27,7 +29,7 @@ class ProductDetail extends Component {
       id = parseInt(urlArr[4])
     }
 
-    const items = products.filter((item) => item.id === id)
+    const items = products.filter((item) => item.id === parseInt(id))
 
     if (items.length > 0) {
       this.setState({ item: items[0], imageUrl: items[0].image_url })
@@ -44,12 +46,14 @@ class ProductDetail extends Component {
       if (this.state.item.id !== nextId) {
         const items = products.filter((item) => item.id === nextId)
 
-        this.setState({ item: items[0] })
+        this.setState({ item: items[0], imageUrl: items[0].image_url })
       }
     }
   }
 
   render() {
+    const { activeSize, qty, item } = this.state
+    console.log(this.state)
     return (
       <div>
         <Head>
@@ -99,7 +103,7 @@ class ProductDetail extends Component {
                       >
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: this.state.item.description,
+                            __html: this.state.item?.description,
                           }}
                         ></div>
                       </div>
@@ -107,18 +111,30 @@ class ProductDetail extends Component {
                   </div>
                 </div>
                 <div className="flex flex-wrap pb-3">
-                  <div className="flex-auto pl-3">
-                    <div className="bg-white h-24 rounded-xl"></div>
-                  </div>
-                  <div className="flex-auto pl-3">
-                    <div className="bg-white h-24 rounded-xl"></div>
-                  </div>
-                  <div className="flex-auto pl-3">
-                    <div className="bg-white h-24 rounded-xl"></div>
-                  </div>
-                  <div className="flex-auto pl-3">
-                    <div className="bg-white h-24 rounded-xl"></div>
-                  </div>
+                  {[0, 1, 2, 3].map((idx) => {
+                    const img = item?.variants[0].thumbnail_urls[idx]
+
+                    if (img === undefined) {
+                      return (
+                        <div key={idx} className="flex-auto pl-3">
+                          <div className="h-24 rounded-xl"></div>
+                        </div>
+                      )
+                    }
+                    return (
+                      <div key={idx} className="flex-auto pl-3">
+                        <div
+                          className="bg-white h-24 rounded-xl"
+                          style={{
+                            backgroundImage: `url(${item?.variants[0].thumbnail_urls[idx]})`,
+                            backgroundSize: "50%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center center",
+                          }}
+                        ></div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
               <div className="flex-none pl-8">
@@ -127,7 +143,7 @@ class ProductDetail extends Component {
                   style={{ width: "320px" }}
                 >
                   <div className="text-xl font-medium py-3">
-                    {this.state.item.name}
+                    {this.state.item?.name}
                   </div>
                   <div className="pt-3">
                     <div className="text-xl font-medium">Size</div>
@@ -136,7 +152,10 @@ class ProductDetail extends Component {
                         <TagSmall
                           key={size}
                           className="border inline-block border-gray-500 ml-0 sm:px-2 sm:mb-3"
-                          active={size == 39}
+                          active={activeSize == size}
+                          onClick={() => {
+                            this.setState({ activeSize: size })
+                          }}
                         >
                           <small className="font-medium">{size}</small>
                         </TagSmall>
@@ -148,6 +167,7 @@ class ProductDetail extends Component {
                     <div className="mt-1">
                       {this.state.item?.colors?.map((item) => (
                         <TagSmall
+                          key={item?.id}
                           className="border inline-block border-gray-500 ml-0 sm:px-2 sm:mb-3"
                           active={true}
                         >
@@ -159,11 +179,23 @@ class ProductDetail extends Component {
                   <div className="py-3 flex flex-wrap">
                     <div className="flex-1 text-xl font-medium">Quantity</div>
                     <div className="flex-none bg-blue-200 rounded-full">
-                      <Button className="rounded-full border bg-white border-gray-600 sm:px-3 sm:py-1 sm:mr-0">
+                      <Button
+                        className="rounded-full border bg-white border-gray-600 sm:px-3 sm:py-1 sm:mr-0"
+                        onClick={() => {
+                          if (qty >= 1) {
+                            this.setState({ qty: qty - 1 })
+                          }
+                        }}
+                      >
                         -
                       </Button>
-                      <div className="inline-block w-10 text-center">1</div>
-                      <Button className="rounded-full border bg-white border-gray-600 sm:px-3 sm:py-1 sm:mr-0">
+                      <div className="inline-block w-10 text-center">{qty}</div>
+                      <Button
+                        className="rounded-full border bg-white border-gray-600 sm:px-3 sm:py-1 sm:mr-0"
+                        onClick={() => {
+                          this.setState({ qty: qty + 1 })
+                        }}
+                      >
                         +
                       </Button>
                     </div>
@@ -172,7 +204,7 @@ class ProductDetail extends Component {
                     <div className="text-xl font-medium">Price</div>
                     <div className="mt-1">
                       <div className="text-3xl font-medium">
-                        Rp {this.state.item.price}
+                        Rp {this.state.item?.price}
                       </div>
                     </div>
                   </div>
@@ -252,7 +284,7 @@ class ProductDetail extends Component {
             <div className="text-2xl font-semibold">More Product</div>
             <div className="flex flex-wrap py-4">
               {moreProduct.map((item) => (
-                <div key={item} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
+                <div key={item?.id} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
                   <ProductCard product={item}></ProductCard>
                 </div>
               ))}

@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { Component } from "react"
+import { connect } from "react-redux"
 import Button from "../../components/elements/button/Button"
 import ProductCard from "../../components/elements/card/ProductCard"
 import Link from "../../components/elements/link/Link"
@@ -8,10 +9,33 @@ import Tag, {
   TagTransparent,
 } from "../../components/elements/tag/Tag"
 import TopNavbar from "../../components/navigation/TopNavbar"
-import products from "../../lib/api/products"
+import productAction from "../../lib/store/product/product.action"
 
 class Products extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeSort: "asc",
+      activeColor: "yellow",
+      activeSize: 28,
+    }
+  }
+
+  setActiveSort(str) {
+    this.setState({ activeSort: str })
+  }
+
+  setActiveColor(str) {
+    this.setState({ activeColor: str })
+  }
+
+  componentDidMount() {
+    this.props.sortData("asc")
+  }
+
   render() {
+    const products = [...this.props.products]
+    const { activeSort, activeColor, activeSize } = this.state
     return (
       <div>
         <Head>
@@ -81,23 +105,62 @@ class Products extends Component {
                   <div className="flex flex-wrap mt-3">
                     <TagSmall
                       className="border border-gray-400 ml-0 py-1 sm:mb-3"
-                      active={true}
+                      active={activeSort == "asc"}
+                      onClick={() => {
+                        this.setActiveSort("asc")
+                        this.props.sortData("asc")
+                      }}
                     >
                       <small>Ascending</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={activeSort == "desc"}
+                      onClick={() => {
+                        this.setActiveSort("desc")
+                        this.props.sortData("desc")
+                      }}
+                    >
                       <small>Descending</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={activeSort == "low-price"}
+                      onClick={() => {
+                        this.setActiveSort("low-price")
+                        this.props.sortData("low-price")
+                      }}
+                    >
                       <small>Lower Price</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={activeSort == "high-price"}
+                      onClick={() => {
+                        this.setActiveSort("high-price")
+                        this.props.sortData("high-price")
+                      }}
+                    >
                       <small>Higher Price</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={activeSort == "new"}
+                      onClick={() => {
+                        this.setActiveSort("new")
+                        this.props.sortData("new")
+                      }}
+                    >
                       <small>Newest</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className="border border-gray-400 ml-0 py-1 sm:mb-3"
+                      active={activeSort == "old"}
+                      onClick={() => {
+                        this.setActiveSort("old")
+                        this.props.sortData("old")
+                      }}
+                    >
                       <small>Oldest</small>
                     </TagSmall>
                   </div>
@@ -106,24 +169,81 @@ class Products extends Component {
                   <div className="text-lg font-medium">Color</div>
                   <div className="flex flex-wrap mt-3">
                     <TagSmall
-                      className="border bg-red-600 border-red-600 ml-0 py-1 sm:mb-3"
-                      active={true}
+                      className={`border ${
+                        activeColor == "red"
+                          ? "bg-red-600 border-red-600"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "red"}
+                      onClick={() => {
+                        this.setActiveColor("red")
+                      }}
                     >
                       <small>Red</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className={`border ${
+                        activeColor == "yellow"
+                          ? "bg-yellow-500 border-yellow-500"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "yellow"}
+                      onClick={() => {
+                        this.setActiveColor("yellow")
+                      }}
+                    >
                       <small>Yellow</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className={`border ${
+                        activeColor == "green"
+                          ? "bg-green-500 border-green-500"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "green"}
+                      onClick={() => {
+                        this.setActiveColor("green")
+                      }}
+                    >
                       <small>Green</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className={`border ${
+                        activeColor == "black"
+                          ? "bg-black-500 border-black-500"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "black"}
+                      onClick={() => {
+                        this.setActiveColor("black")
+                      }}
+                    >
                       <small>Black</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className={`border ${
+                        activeColor == "blue"
+                          ? "bg-blue-500 border-blue-500"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "blue"}
+                      onClick={() => {
+                        this.setActiveColor("blue")
+                      }}
+                    >
                       <small>Blue</small>
                     </TagSmall>
-                    <TagSmall className="border border-gray-400 ml-0 py-1 sm:mb-3">
+                    <TagSmall
+                      className={`border ${
+                        activeColor == "pink"
+                          ? "bg-pink-500 border-pink-500"
+                          : "border-gray-400"
+                      }  ml-0 py-1 sm:mb-3`}
+                      active={activeColor === "pink"}
+                      onClick={() => {
+                        this.setActiveColor("pink")
+                      }}
+                    >
                       <small>Pink</small>
                     </TagSmall>
                   </div>
@@ -136,6 +256,10 @@ class Products extends Component {
                         <TagSmall
                           key={size}
                           className="border  border-gray-500 ml-0 sm:px-2 sm:mb-3"
+                          active={activeSize == size}
+                          onClick={() => {
+                            this.setState({ activeSize: size })
+                          }}
                         >
                           <small>{size}</small>
                         </TagSmall>
@@ -161,8 +285,8 @@ class Products extends Component {
 
               <div className="flex flex-wrap py-4">
                 {products.map((item) => (
-                  <div key={item} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
-                    <ProductCard key={item.id} product={item}></ProductCard>
+                  <div key={item?.id} className="w-3/6 sm:w-2/6 lg:w-1/5 p-2">
+                    <ProductCard product={item}></ProductCard>
                   </div>
                 ))}
               </div>
@@ -238,4 +362,12 @@ class Products extends Component {
   }
 }
 
-export default Products
+const mapState = (state) => ({
+  products: state.product.products,
+})
+
+const mapDispatch = {
+  sortData: productAction.sortData,
+}
+
+export default connect(mapState, mapDispatch)(Products)
